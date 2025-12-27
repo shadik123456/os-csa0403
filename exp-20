@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_USERS 5
+#define MAX_FILES 5
+#define NAME 20
+
+typedef struct {
+    char filename[NAME];
+} File;
+
+typedef struct {
+    char username[NAME];
+    File files[MAX_FILES];
+    int file_count;
+} User;
+
+int main() {
+    User users[MAX_USERS];
+    int user_count=0, i, j;
+    char username[NAME], filename[NAME];
+
+    // Input Users and Files
+    printf("Enter number of users: "); scanf("%d", &user_count);
+    for(i=0; i<user_count; i++) {
+        printf("Enter username: "); scanf("%s", users[i].username);
+        printf("Enter number of files for %s: ", users[i].username);
+        scanf("%d", &users[i].file_count);
+        for(j=0; j<users[i].file_count; j++) {
+            printf("Enter filename %d: ", j+1); scanf("%s", users[i].files[j].filename);
+        }
+    }
+
+    // Display directories
+    printf("\nDirectory Structure:\n");
+    for(i=0; i<user_count; i++) {
+        printf("User %d Directory: ", i+1);
+        for(j=0; j<users[i].file_count; j++) {
+            printf("%s", users[i].files[j].filename);
+            if(j != users[i].file_count-1) printf(", ");
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
