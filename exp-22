@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+int main() {
+    int fd;
+    struct stat fileStat;
+    DIR *dir;
+    struct dirent *entry;
+
+    /* Open a file */
+    fd = open("sample.txt", O_CREAT | O_RDWR, 0644);
+    write(fd, "UNIX I/O Calls", 14);
+
+    /* fcntl() */
+    int flags = fcntl(fd, F_GETFL);
+    printf("File Status Flags: %d\n", flags);
+
+    /* lseek() */
+    off_t pos = lseek(fd, 0, SEEK_SET);
+    printf("File pointer moved to position: %ld\n", pos);
+
+    /* stat() */
+    stat("sample.txt", &fileStat);
+    printf("File Size: %ld bytes\n", fileStat.st_size);
+
+    close(fd);
+
+    /* opendir() and readdir() */
+    dir = opendir(".");
+    printf("\nDirectory contents:\n");
+    while((entry = readdir(dir)) != NULL) {
+        printf("%s\n", entry->d_name);
+    }
+
+    closedir(dir);
+    return 0;
+}
