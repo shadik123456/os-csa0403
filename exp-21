@@ -1,0 +1,34 @@
+#include <stdio.h>
+
+int main() {
+    FILE *fp;
+    char write_data[] = "File Management in C";
+    char read_data[50];
+
+    /* Create and open file for writing */
+    fp = fopen("test.txt", "w");
+    if (fp == NULL) {
+        printf("File creation failed\n");
+        return 1;
+    }
+
+    /* Write to file */
+    fputs(write_data, fp);
+    fclose(fp);
+
+    /* Open file for reading */
+    fp = fopen("test.txt", "r");
+    if (fp == NULL) {
+        printf("File open failed\n");
+        return 1;
+    }
+
+    /* Read from file */
+    fgets(read_data, sizeof(read_data), fp);
+    fclose(fp);
+
+    /* Display output */
+    printf("File Content: %s\n", read_data);
+
+    return 0;
+}
