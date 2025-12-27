@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <grp.h>
+
+int main() {
+    struct stat fileStat;
+    char filename[100];
+
+    printf("Enter file name: ");
+    scanf("%s", filename);
+
+    if(stat(filename, &fileStat) < 0) {
+        perror("stat");
+        return 1;
+    }
+
+    // File type
+    printf("File: %s\n", filename);
+    printf("File type: ");
+    if(S_ISREG(fileStat.st_mode)) printf("Regular File\n");
+    else if(S_ISDIR(fileStat.st_mode)) printf("Directory\n");
+    else printf("Other\n");
+
+    // Permissions
+    printf("Permissions: ");
+    printf( (fileStat.st_mode & S_IRUSR) ? "r" : "-");
+    printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
+    printf( (fileStat.st_mode & S_IXUSR) ? "x" : "-");
+    printf( (fileStat.st_mode & S_IRGRP) ? "r" : "-");
+    printf( (fileStat.st_mode & S_IWGRP) ? "w" : "-");
+    printf( (fileStat.st_mode & S_IXGRP) ? "x" : "-");
+    printf( (fileStat.st_mode & S_IROTH) ? "r" : "-");
+    printf( (fileStat.st_mode & S_IWOTH) ? "w" : "-");
+    printf( (fileStat.st_mode & S_IXOTH) ? "x" : "-");
+    printf("\n");
+
+    // Owner and group
+    struct passwd *pw = getpwuid(fileStat.st_uid);
+    struct group  *gr = getgrgid(fileStat.st_gid);
+    printf("Owner: %s\n", pw->pw_name);
+    printf("Group: %s\n", gr->gr_name);
+
+    return 0;
+}
